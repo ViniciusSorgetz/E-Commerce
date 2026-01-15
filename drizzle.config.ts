@@ -7,8 +7,8 @@ dotenv.configDotenv({
 });
 
 export default defineConfig({
-  out: './src/infra/database/drizzle',
-  schema: './src/infra/database/schema.ts',
+  out: './src/infra/database/drizzle/migrations',
+  schema: './src/infra/database/drizzle/schemas',
   dialect: 'postgresql',
   dbCredentials: {
     password: process.env.POSTGRES_PASSWORD!,

@@ -1,10 +1,10 @@
 import { Product } from 'src/app/entities/product/product';
 import { FormatationError } from 'src/shared/errors/formatation-error';
 import { Replace } from 'src/shared/utils/replace';
-import { productPresenterSchema } from '../dtos/responses/product-presenter.schema';
+import { registerProductPresenterSchema } from './register-product.dto';
 
-export class ProductPresenter {
-  static present(product: Product): productPresenterSchema {
+export class RegisterProductPresenter {
+  static present(product: Product): registerProductPresenterSchema {
     const formattedResponse = {
       product: {
         id: product.id,
@@ -18,12 +18,12 @@ export class ProductPresenter {
 
   static validate(
     formattedResponse: Replace<
-      productPresenterSchema,
+      registerProductPresenterSchema,
       { product: { id?: number } }
     >,
   ) {
     try {
-      return productPresenterSchema.parse(formattedResponse);
+      return registerProductPresenterSchema.parse(formattedResponse);
     } catch (error) {
       throw new FormatationError({
         message: 'Error while formatting data for response.',

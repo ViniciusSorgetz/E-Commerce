@@ -1,28 +1,24 @@
-import { ValidationError } from 'src/shared/errors/validation-error';
-import { reviewRate } from 'src/shared/types/review-rate';
-import { validateUUID } from 'src/shared/utils/validate-uuid';
+import { DateProp } from '../shared/date-prop';
+import { Uuid } from '../shared/uuid';
+import { ProductReviewRate } from './product-review-rate';
 
 interface ProductReviewProps {
-  rate: reviewRate;
+  rate: ProductReviewRate;
   description: string;
-  user_id: string;
+  user_id: Uuid;
   product_id: number;
+  created_at: DateProp;
+  updated_at: DateProp;
 }
 
 export class ProductReview {
   private props: ProductReviewProps;
 
   constructor(props: ProductReviewProps) {
-    if (props.rate >= 1 && props.rate <= 5 && props.rate % 0.5 == 0) {
-      throw new ValidationError('Invalid rate. Rate must be between 1/5.');
-    }
-
-    validateUUID(props.user_id);
-
     this.props = props;
   }
 
-  public get rate(): reviewRate {
+  public get rate(): ProductReviewRate {
     return this.props.rate;
   }
 
