@@ -1,3 +1,4 @@
+import { Replace } from '@src/shared/utils/replace';
 import { DateProp } from '../shared/date-prop';
 import { NumericId } from '../shared/numeric-id';
 import { ProductSpecificationInformation } from './product-specification-information';
@@ -7,15 +8,28 @@ interface ProductSpecificationProps {
   id?: NumericId;
   label: ProductSpecificationLabel;
   information: ProductSpecificationInformation;
-  created_at: DateProp;
-  updated_at: DateProp;
+  createdAt: DateProp;
+  updatedAt: DateProp;
 }
 
 export class ProductSpecification {
   private props: ProductSpecificationProps;
 
-  constructor(props: ProductSpecificationProps) {
+  private constructor(props: ProductSpecificationProps) {
     this.props = props;
+  }
+
+  public static create(
+    props: Replace<
+      ProductSpecificationProps,
+      { createdAt?: undefined; updatedAt?: undefined }
+    >,
+  ) {
+    return new ProductSpecification({
+      ...props,
+      createdAt: new DateProp(),
+      updatedAt: new DateProp(),
+    });
   }
 
   public get label(): ProductSpecificationLabel {

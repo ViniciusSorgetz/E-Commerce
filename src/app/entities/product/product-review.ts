@@ -1,3 +1,4 @@
+import { Replace } from '@src/shared/utils/replace';
 import { DateProp } from '../shared/date-prop';
 import { Uuid } from '../shared/uuid';
 import { ProductReviewRate } from './product-review-rate';
@@ -5,17 +6,30 @@ import { ProductReviewRate } from './product-review-rate';
 interface ProductReviewProps {
   rate: ProductReviewRate;
   description: string;
-  user_id: Uuid;
-  product_id: number;
-  created_at: DateProp;
-  updated_at: DateProp;
+  userId: Uuid;
+  productId: number;
+  createdAt: DateProp;
+  updatedAt: DateProp;
 }
 
 export class ProductReview {
   private props: ProductReviewProps;
 
-  constructor(props: ProductReviewProps) {
+  private constructor(props: ProductReviewProps) {
     this.props = props;
+  }
+
+  public static create(
+    props: Replace<
+      ProductReviewProps,
+      { createdAt?: undefined; updatedAt?: undefined }
+    >,
+  ) {
+    return new ProductReview({
+      ...props,
+      createdAt: new DateProp(),
+      updatedAt: new DateProp(),
+    });
   }
 
   public get rate(): ProductReviewRate {

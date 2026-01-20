@@ -1,9 +1,9 @@
 import { ProductCategory } from '@src/app/entities/product/product-category';
-import { ProductSpecification } from '@src/app/entities/product/product-specification';
-import { ManufacturerRepository } from '@src/app/repositories/manufacturer-repository';
-import { ProductCategoryRepository } from '@src/app/repositories/product-category-repository';
-import { ProductRepository } from '@src/app/repositories/product-repository';
-import { ValidationError } from '@src/shared/errors/validation-error';
+import { ManufacturerRepository } from '@src/app/repositories/manufacturer.repository';
+import { ProductCategoryRepository } from '@src/app/repositories/product-category.repository';
+import { ProductRepository } from '@src/app/repositories/product.repository';
+import { ValidationError } from '@src/shared/errors/validation.error';
+import { productSpecificationsInput } from '@src/shared/types/product-specifications-input';
 
 export class RegisterProductValidator {
   constructor(
@@ -19,7 +19,7 @@ export class RegisterProductValidator {
   }: {
     name: string;
     description: string;
-    specifications: ProductSpecification[];
+    specifications: productSpecificationsInput;
   }) {
     const foundProduct = await this.productRepository.checkForEqual({
       name: name,
@@ -46,7 +46,7 @@ export class RegisterProductValidator {
     return foundCategories as ProductCategory[];
   }
 
-  public async checkManufacturer(manufacturerId: number) {
+  public async checkManufacturer(manufacturerId: string) {
     const foundManufacturer =
       await this.manufacturerRepository.findOneById(manufacturerId);
 

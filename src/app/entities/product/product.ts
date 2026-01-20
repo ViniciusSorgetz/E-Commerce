@@ -7,29 +7,44 @@ import { ProductDescription } from './product-description';
 import { ProductName } from './product-name';
 import { ProductCategory } from './product-category';
 import { ProductImage } from './product-image';
-import { ValidationError } from 'src/shared/errors/validation-error';
+import { ValidationError } from 'src/shared/errors/validation.error';
+import { Uuid } from '../shared/uuid';
+import { Replace } from '@src/shared/utils/replace';
 
 interface ProductProps {
   id?: NumericId;
   name: ProductName;
   price: ProductPrice;
   description: ProductDescription;
-  manufacturerId: NumericId;
+  manufacturerId: Uuid;
   specifications: ProductSpecification[];
   categories: ProductCategory[];
   reviews: ProductReview[];
   mainImage: ProductImage;
   images: ProductImage[];
-  created_at: DateProp;
-  updated_at: DateProp;
+  createdAt: DateProp;
+  updatedAt: DateProp;
 }
 
 export class Product {
   private props: ProductProps;
 
-  constructor(props: ProductProps) {
+  private constructor(props: ProductProps) {
     this.validateImages(props.mainImage, props.images);
     this.props = props;
+  }
+
+  public static create(
+    props: Replace<
+      ProductProps,
+      { createdAt?: undefined; updatedAt?: undefined }
+    >,
+  ) {
+    return new Product({
+      ...props,
+      createdAt: new DateProp(),
+      updatedAt: new DateProp(),
+    });
   }
 
   private validateImages(mainImage: ProductImage, images: ProductImage[]) {
