@@ -47,6 +47,10 @@ export class Product {
     });
   }
 
+  public static with(props: ProductProps) {
+    return new Product(props);
+  }
+
   private validateImages(mainImage: ProductImage, images: ProductImage[]) {
     if (images.includes(mainImage)) {
       throw new ValidationError(
@@ -81,5 +85,29 @@ export class Product {
 
   public get categories(): ProductCategory[] {
     return this.props.categories;
+  }
+
+  public get updatedAt(): Date {
+    return this.props.updatedAt.value;
+  }
+
+  public get createdAt(): Date {
+    return this.props.createdAt.value;
+  }
+
+  public get mainImage(): ProductImage {
+    return this.props.mainImage;
+  }
+
+  public get manufacturerId(): string {
+    return this.props.manufacturerId.value;
+  }
+
+  public get images(): ProductImage[] {
+    return this.props.images;
+  }
+
+  public get reviews(): ProductReview[] {
+    return this.props.reviews;
   }
 }

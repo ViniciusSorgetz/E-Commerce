@@ -2,12 +2,14 @@ import { Replace } from '@src/shared/utils/replace';
 import { DateProp } from '../shared/date-prop';
 import { Uuid } from '../shared/uuid';
 import { ProductReviewRate } from './product-review-rate';
+import { NumericId } from '../shared/numeric-id';
 
 interface ProductReviewProps {
+  id?: NumericId;
   rate: ProductReviewRate;
   description: string;
   userId: Uuid;
-  productId: number;
+  productId: NumericId;
   createdAt: DateProp;
   updatedAt: DateProp;
 }
@@ -32,19 +34,35 @@ export class ProductReview {
     });
   }
 
-  public get rate(): ProductReviewRate {
-    return this.props.rate;
+  public static with(props: ProductReviewProps) {
+    return new ProductReview(props);
+  }
+
+  public get id(): number | undefined {
+    return this.props.id?.value;
+  }
+
+  public get rate(): number {
+    return this.props.rate.value;
   }
 
   public get description(): string {
-    return this.description;
+    return this.props.description;
   }
 
   public get user_id(): string {
-    return this.user_id;
+    return this.props.userId.value;
   }
 
-  public get product_id(): string {
-    return this.product_id;
+  public get product_id(): number {
+    return this.props.productId.value;
+  }
+
+  public get updatedAt(): Date {
+    return this.props.updatedAt.value;
+  }
+
+  public get createdAt(): Date {
+    return this.props.createdAt.value;
   }
 }

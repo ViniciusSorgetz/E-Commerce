@@ -30,7 +30,23 @@ export class ProductImage {
     });
   }
 
+  public static with(props: ProductImageProps) {
+    return new ProductImage(props);
+  }
+
   public get id(): number {
     return this.props.id.value;
+  }
+
+  public get url(): string {
+    return this.props.url.value;
+  }
+
+  public get updatedAt(): Date {
+    return this.props.updatedAt.value;
+  }
+
+  public get createdAt(): Date {
+    return this.props.createdAt.value;
   }
 }

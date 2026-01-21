@@ -30,7 +30,23 @@ export class ProductCategory {
     });
   }
 
-  public get value(): ProductCategoryProps {
-    return this.props;
+  public static with(props: ProductCategoryProps) {
+    return new ProductCategory(props);
+  }
+
+  public get id(): number {
+    return this.props.id.value;
+  }
+
+  public get category(): string {
+    return this.props.category.value;
+  }
+
+  public get createdAt(): Date {
+    return this.props.createdAt.value;
+  }
+
+  public get updatedAt(): Date {
+    return this.props.updatedAt.value;
   }
 }

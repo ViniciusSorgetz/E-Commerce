@@ -29,4 +29,8 @@ export class Manufacturer {
       updatedAt: new DateProp(),
     });
   }
+
+  public static with(props: ManufacturerProps) {
+    return new Manufacturer(props);
+  }
 }

@@ -1,0 +1,5 @@
+{
+    "directory": [ "./src/app/entities", "./src/infra/database/drizzle/schemas", "./src/shared" ],
+    "noHeader": true,
+    "delete": true
+}

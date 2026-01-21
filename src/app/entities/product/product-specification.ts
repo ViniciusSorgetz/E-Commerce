@@ -32,11 +32,27 @@ export class ProductSpecification {
     });
   }
 
-  public get label(): ProductSpecificationLabel {
-    return this.props.label;
+  public static with(props: ProductSpecificationProps) {
+    return new ProductSpecification(props);
   }
 
-  public get information(): ProductSpecificationInformation {
-    return this.props.information;
+  public get id(): number | undefined {
+    return this.props.id?.value;
+  }
+
+  public get label(): string {
+    return this.props.label.value;
+  }
+
+  public get information(): string {
+    return this.props.information.value;
+  }
+
+  public get updatedAt(): Date {
+    return this.props.updatedAt.value;
+  }
+
+  public get createdAt(): Date {
+    return this.props.createdAt.value;
   }
 }

@@ -1,9 +1,10 @@
+import { productSpecificationsInput } from '@src/shared/types/product-specifications-input';
 import { Product } from '../entities/product/product';
 
 export interface CheckForEqualProps {
   name: string;
   description: string;
-  specifications: { label: string; information: string }[];
+  specifications: productSpecificationsInput;
 }
 
 export interface ProductRepository {
