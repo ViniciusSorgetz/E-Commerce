@@ -1,4 +1,4 @@
-import { ValidationError } from 'src/shared/errors/validation-error';
+import { ValidationError } from 'src/shared/errors/validation.error';
 import { ZodError, ZodObject, z } from 'zod';
 
 export class RequestValidator {

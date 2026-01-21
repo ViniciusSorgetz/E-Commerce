@@ -3,7 +3,7 @@ import { productsTable } from './products.table';
 import { productCategoriesTable } from './product-categories.table';
 
 export const productTagsTable = pgTable('product_tags', {
-  product_id: integer('product_id')
+  productId: integer('product_id')
     .notNull()
     .references(() => productsTable.id),
   productCategoryId: integer('product_category_id')

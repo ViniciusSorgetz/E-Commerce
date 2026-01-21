@@ -3,7 +3,7 @@ import { productsTable } from './products.table';
 
 export const productCategoriesTable = pgTable('product_categories', {
   id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
-  product_id: integer('product_id')
+  productId: integer('product_id')
     .references(() => productsTable.id)
     .notNull(),
   category: varchar('category', { length: 50 }).notNull().unique(),

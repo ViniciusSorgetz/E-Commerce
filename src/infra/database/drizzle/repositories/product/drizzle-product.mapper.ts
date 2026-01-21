@@ -123,7 +123,7 @@ export class DrizzleProductMapper {
       },
       categories: product.categories.map((category) => {
         return {
-          product_id: productId,
+          productId: productId,
           id: category.id,
           category: category.category,
           createdAt: category.createdAt,
@@ -132,7 +132,7 @@ export class DrizzleProductMapper {
       }),
       images: product.images.map((image) => {
         return {
-          product_id: productId,
+          productId: productId,
           id: image.id,
           url: image.url,
           updatedAt: image.updatedAt,
@@ -140,7 +140,7 @@ export class DrizzleProductMapper {
         };
       }),
       mainImage: {
-        product_id: productId,
+        productId: productId,
         id: product.mainImage.id,
         url: product.mainImage.url,
         updatedAt: product.mainImage.updatedAt,
