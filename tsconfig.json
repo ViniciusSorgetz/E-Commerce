@@ -20,8 +20,9 @@
     "paths": {
       "@src/*": ["./src/*"],
       "@app/*": ["./src/app/*"],
-      "@entities/*": ["./src/app/entities/*"],
-      "@infra/*": ["./src/infra/*"]
+      "@infra/*": ["./src/infra/*"],
+      "@shared/*": ["./src/shared/*"],
+      "@entities/*": ["./src/app/entities/*"]
     }
   }
 }

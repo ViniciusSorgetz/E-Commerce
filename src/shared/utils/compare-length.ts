@@ -1,4 +1,4 @@
-import { DatabaseError } from '@src/shared';
+import { DatabaseError } from '../errors/database.error';
 
 export function compareLength(
   rawObjectLength: number,

@@ -17,10 +17,10 @@ import {
   productSpecificationsInput,
   NotFoundError,
   DatabaseError,
+  compareLength,
 } from '@src/shared';
 import { DrizzleProductMapper } from './drizzle-product.mapper';
 import { Product } from '@src/app/entities';
-import { compareLength } from '../shared/repository.utils';
 
 @Injectable()
 export class DrizzleProductRepository implements ProductRepository {
@@ -31,20 +31,18 @@ export class DrizzleProductRepository implements ProductRepository {
     description,
     specifications,
   }: CheckForEqualProps): Promise<boolean> {
-    const foundProduct = await getProductByNameAndDescription(
+    const foundProduct = await this.getProductByNameAndDescription(
       name,
       description,
-      this.drizzle,
     );
 
     if (!foundProduct) {
       return false;
     }
 
-    const foundSpecifications = await getSpecifications(
+    const foundSpecifications = await this.getSpecificationsByInputAndProductId(
       specifications,
       foundProduct.id,
-      this.drizzle,
     );
 
     if (foundSpecifications.includes(undefined)) {
@@ -52,85 +50,24 @@ export class DrizzleProductRepository implements ProductRepository {
     }
 
     return true;
-
-    async function getProductByNameAndDescription(
-      name: string,
-      description: string,
-      drizzle: NodePgDatabase,
-    ) {
-      const result = await drizzle
-        .select()
-        .from(productsTable)
-        .where(
-          and(
-            eq(productsTable.name, name),
-            eq(productsTable.description, description),
-          ),
-        )
-        .limit(1);
-
-      return result[0] ?? null;
-    }
-
-    async function getSpecifications(
-      specifications: productSpecificationsInput,
-      productId: number,
-      drizzle: NodePgDatabase,
-    ) {
-      return await Promise.all(
-        specifications.map(async (specification) => {
-          const foundSpecification = await drizzle
-            .select()
-            .from(productSpecificatonsTable)
-            .where(
-              and(
-                eq(productSpecificatonsTable.productId, productId),
-                eq(productSpecificatonsTable.label, specification.label),
-                eq(
-                  productSpecificatonsTable.information,
-                  specification.information,
-                ),
-              ),
-            )
-            .limit(1);
-
-          return foundSpecification.length == 0
-            ? undefined
-            : foundSpecification[0];
-        }),
-      );
-    }
   }
 
   public async findOneById(id: number): Promise<Product> {
-    const foundProduct = await getProductById(id, this.drizzle);
+    const foundProduct = await this.getProductById(id);
 
     if (!foundProduct) {
       throw new NotFoundError("Couldn't find product by the given id.");
     }
 
-    const foundCategories = await getCategories(id, this.drizzle);
+    const foundCategories = await this.getCategoriesByProductId(id);
 
     assertFoundCategories(foundCategories);
 
-    const foundSpecifications = await this.drizzle
-      .select()
-      .from(productSpecificatonsTable)
-      .where(eq(productSpecificatonsTable.productId, id));
-
-    const foundReviews = await this.drizzle
-      .select()
-      .from(productReviewsTable)
-      .where(eq(productReviewsTable.productId, id));
-
-    const foundImages = await this.drizzle
-      .select()
-      .from(productImagesTable)
-      .where(eq(productImagesTable.productId, id));
-
-    const foundMainImage = await getMainImageById(
+    const foundSpecifications = await this.getSpecificationsByProductId(id);
+    const foundReviews = await this.getReviewsByProductId(id);
+    const foundImages = await this.getImagesByProductId(id);
+    const foundMainImage = await this.getMainImageById(
       foundProduct.mainImageId,
-      this.drizzle,
     );
 
     if (!foundMainImage) {
@@ -146,50 +83,12 @@ export class DrizzleProductRepository implements ProductRepository {
       specifications: foundSpecifications,
     });
 
-    async function getProductById(id: number, drizzle: NodePgDatabase) {
-      const result = await drizzle
-        .select()
-        .from(productsTable)
-        .where(eq(productsTable.id, id))
-        .limit(1);
-
-      return result[0] ?? null;
-    }
-
-    async function getCategories(produtId: number, drizzle: NodePgDatabase) {
-      const result = await drizzle
-        .select()
-        .from(productTagsTable)
-        .where(eq(productTagsTable.productId, produtId))
-        .leftJoin(
-          productCategoriesTable,
-          eq(productTagsTable.productCategoryId, productCategoriesTable.id),
-        );
-
-      return result.map((result) => {
-        return result.product_categories;
-      });
-    }
-
     function assertFoundCategories(
       foundCategories: (typeof productCategoriesTable.$inferSelect | null)[],
     ): asserts foundCategories is (typeof productCategoriesTable.$inferSelect)[] {
       if (foundCategories.includes(null)) {
         throw new NotFoundError("Couldn't find all of the product categories.");
       }
-    }
-
-    async function getMainImageById(
-      mainImageId: number,
-      drizzle: NodePgDatabase,
-    ) {
-      const result = await drizzle
-        .select()
-        .from(productImagesTable)
-        .where(eq(productCategoriesTable.id, mainImageId))
-        .limit(1);
-
-      return result[0] ?? null;
     }
   }
 
@@ -201,61 +100,188 @@ export class DrizzleProductRepository implements ProductRepository {
       mainImage,
       specifications,
     } = DrizzleProductMapper.toDrizzle(product);
-    const savedProduct = (
-      await this.drizzle
-        .insert(productsTable)
-        .values(drizzleProduct)
-        .returning()
-    )[0];
 
-    if (!savedProduct) {
+    const savedProduct = await this.saveProduct(drizzleProduct);
+    await this.saveCategories(categories);
+    await this.saveSpecifications(specifications);
+    await this.saveImages(images);
+    await this.saveMainImage(mainImage);
+
+    return { id: savedProduct.id };
+  }
+
+  private async getProductByNameAndDescription(
+    name: string,
+    description: string,
+  ) {
+    const result = await this.drizzle
+      .select()
+      .from(productsTable)
+      .where(
+        and(
+          eq(productsTable.name, name),
+          eq(productsTable.description, description),
+        ),
+      )
+      .limit(1);
+
+    return result[0] ?? null;
+  }
+
+  private async getSpecificationsByInputAndProductId(
+    specifications: productSpecificationsInput,
+    productId: number,
+  ) {
+    return await Promise.all(
+      specifications.map(async (specification) => {
+        const foundSpecification = await this.drizzle
+          .select()
+          .from(productSpecificatonsTable)
+          .where(
+            and(
+              eq(productSpecificatonsTable.productId, productId),
+              eq(productSpecificatonsTable.label, specification.label),
+              eq(
+                productSpecificatonsTable.information,
+                specification.information,
+              ),
+            ),
+          )
+          .limit(1);
+
+        return foundSpecification.length == 0
+          ? undefined
+          : foundSpecification[0];
+      }),
+    );
+  }
+
+  private async getProductById(productId: number) {
+    const result = await this.drizzle
+      .select()
+      .from(productsTable)
+      .where(eq(productsTable.id, productId))
+      .limit(1);
+
+    return result[0] ?? null;
+  }
+
+  private async getCategoriesByProductId(produtId: number) {
+    const result = await this.drizzle
+      .select()
+      .from(productTagsTable)
+      .where(eq(productTagsTable.productId, produtId))
+      .leftJoin(
+        productCategoriesTable,
+        eq(productTagsTable.productCategoryId, productCategoriesTable.id),
+      );
+
+    return result.map((result) => {
+      return result.product_categories;
+    });
+  }
+
+  private async getSpecificationsByProductId(productId: number) {
+    return await this.drizzle
+      .select()
+      .from(productSpecificatonsTable)
+      .where(eq(productSpecificatonsTable.productId, productId));
+  }
+
+  private async getReviewsByProductId(productId: number) {
+    return await this.drizzle
+      .select()
+      .from(productReviewsTable)
+      .where(eq(productReviewsTable.productId, productId));
+  }
+
+  private async getImagesByProductId(productId: number) {
+    return await this.drizzle
+      .select()
+      .from(productImagesTable)
+      .where(eq(productImagesTable.productId, productId));
+  }
+
+  private async getMainImageById(mainImageId: number) {
+    const result = await this.drizzle
+      .select()
+      .from(productImagesTable)
+      .where(eq(productCategoriesTable.id, mainImageId))
+      .limit(1);
+
+    return result[0] ?? null;
+  }
+
+  private async saveProduct(product: typeof productsTable.$inferInsert) {
+    const result = await this.drizzle
+      .insert(productsTable)
+      .values(product)
+      .returning();
+
+    if (!result[0]) {
       throw new DatabaseError({
         message: 'Could insert a product in the database.',
       });
     }
 
-    const savedCategories = await this.drizzle
+    return result[0];
+  }
+
+  private async saveCategories(
+    categories: (typeof productCategoriesTable.$inferInsert)[],
+  ) {
+    const result = await this.drizzle
       .insert(productCategoriesTable)
       .values(categories)
       .returning();
 
-    compareLength(
-      product.categories.length,
-      savedCategories.length,
-      'product categories',
-    );
+    compareLength(result.length, categories.length, 'product categories');
 
-    const savedSpecifications = await this.drizzle
+    return result;
+  }
+
+  private async saveSpecifications(
+    specifications: (typeof productSpecificatonsTable.$inferInsert)[],
+  ) {
+    const result = await this.drizzle
       .insert(productSpecificatonsTable)
       .values(specifications)
       .returning();
 
     compareLength(
-      product.specifications.length,
-      savedSpecifications.length,
+      result.length,
+      specifications.length,
       'product specifications',
     );
 
-    const savedImages = await this.drizzle
+    return result;
+  }
+
+  private async saveImages(images: (typeof productImagesTable.$inferInsert)[]) {
+    const result = await this.drizzle
       .insert(productImagesTable)
       .values(images)
       .returning();
 
-    compareLength(product.images.length, savedImages.length, 'product images');
+    compareLength(result.length, images.length, 'product images');
 
-    const savedMainImage = (
-      await this.drizzle
-        .insert(productImagesTable)
-        .values(mainImage)
-        .returning()
-    )[0];
+    return result;
+  }
 
-    if (!savedMainImage) {
+  private async saveMainImage(
+    mainImage: typeof productImagesTable.$inferInsert,
+  ) {
+    const result = await this.drizzle
+      .insert(productImagesTable)
+      .values(mainImage)
+      .returning();
+
+    if (!result[0]) {
       throw new DatabaseError({
         message: "Couldn't save product main image into the database.",
       });
     }
 
-    return { id: savedProduct.id };
+    return result[0];
   }
 }
