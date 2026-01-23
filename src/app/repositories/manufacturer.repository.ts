@@ -1,5 +1,5 @@
 import { Manufacturer } from '../entities/manufacturer/manufacturer';
 
-export interface ManufacturerRepository {
+export abstract class ManufacturerRepository {
   findOneById: (id: string) => Promise<Manufacturer | null>;
 }

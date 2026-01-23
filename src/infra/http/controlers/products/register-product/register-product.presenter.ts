@@ -1,5 +1,5 @@
 import { Product } from 'src/app/entities/product/product';
-import { FormatationError } from 'src/shared/errors/formatation-error';
+import { FormatationError } from '@shared/.';
 import { Replace } from 'src/shared/utils/replace';
 import { registerProductPresenterSchema } from './register-product.dto';
 
@@ -10,6 +10,20 @@ export class RegisterProductPresenter {
         id: product.id,
         name: product.name,
         price: product.price,
+        description: product.description,
+        specifications: product.specifications.map((specification) => {
+          return {
+            label: specification.label,
+            information: specification.information,
+          };
+        }),
+        categories: product.categories.map((category) => {
+          return {
+            id: category.id,
+            category: category.category,
+          };
+        }),
+        manufacturer_id: product.manufacturerId,
       },
     };
 

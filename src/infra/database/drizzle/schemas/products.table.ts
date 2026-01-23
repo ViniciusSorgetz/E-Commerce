@@ -15,7 +15,6 @@ export const productsTable = pgTable('products', {
   manufacturerId: varchar('manufacturer_id', { length: 36 })
     .notNull()
     .references(() => manufacturersTable.id),
-  mainImageId: integer('main_image_id').notNull(),
   updatedAt: timestamp('updated_at').notNull(),
   createdAt: timestamp('created_at').notNull(),
 });

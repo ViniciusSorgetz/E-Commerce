@@ -23,21 +23,18 @@ import {
   ProductSpecificationLabel,
   Uuid,
 } from '@src/app/entities';
-import { FormatationError } from '@src/shared';
 
-interface DrizzleProduct {
+export interface DrizzleProduct {
   product: typeof productsTable.$inferSelect;
   categories: (typeof productCategoriesTable.$inferSelect)[];
   specifications: (typeof productSpecificatonsTable.$inferSelect)[];
   reviews: (typeof productReviewsTable.$inferSelect)[];
-  mainImage: typeof productImagesTable.$inferSelect;
   images: (typeof productImagesTable.$inferSelect)[];
 }
 
 export class DrizzleProductMapper {
   public static toEntity({
     product,
-    mainImage,
     images,
     categories,
     specifications,
@@ -69,15 +66,10 @@ export class DrizzleProductMapper {
           createdAt: new DateProp(category.createdAt),
         });
       }),
-      mainImage: ProductImage.with({
-        id: new NumericId(mainImage.id),
-        url: new ProductImageUrl(mainImage.url),
-        updatedAt: new DateProp(mainImage.updatedAt),
-        createdAt: new DateProp(mainImage.createdAt),
-      }),
       images: images.map((image) => {
         return ProductImage.with({
           id: new NumericId(image.id),
+          position: new NumericId(image.position),
           url: new ProductImageUrl(image.url),
           updatedAt: new DateProp(image.updatedAt),
           createdAt: new DateProp(image.createdAt),
@@ -108,22 +100,20 @@ export class DrizzleProductMapper {
     });
   }
 
-  public static toDrizzle(product: Product): DrizzleProduct {
-    const productId = getValidatedNumericId(product.id, 'product');
+  public static toDrizzle(product: Product) {
     return {
       product: {
-        id: productId,
+        id: product.id,
         name: product.name,
         description: product.description,
         price: product.price,
-        mainImageId: product.mainImage.id,
         manufacturerId: product.manufacturerId,
         updatedAt: product.updatedAt,
         createdAt: product.createdAt,
       },
       categories: product.categories.map((category) => {
         return {
-          productId: productId,
+          productId: product.id,
           id: category.id,
           category: category.category,
           createdAt: category.createdAt,
@@ -132,23 +122,17 @@ export class DrizzleProductMapper {
       }),
       images: product.images.map((image) => {
         return {
-          productId: productId,
           id: image.id,
+          productId: product.id,
+          position: image.position,
           url: image.url,
           updatedAt: image.updatedAt,
           createdAt: image.createdAt,
         };
       }),
-      mainImage: {
-        productId: productId,
-        id: product.mainImage.id,
-        url: product.mainImage.url,
-        updatedAt: product.mainImage.updatedAt,
-        createdAt: product.mainImage.createdAt,
-      },
       reviews: product.reviews.map((review) => {
         return {
-          id: getValidatedNumericId(review.id, 'product review'),
+          id: review.id,
           rate: review.rate,
           description: review.description,
           productId: review.product_id,
@@ -159,26 +143,14 @@ export class DrizzleProductMapper {
       }),
       specifications: product.specifications.map((specification) => {
         return {
-          id: getValidatedNumericId(specification.id, 'product specification'),
+          id: specification.id,
           label: specification.label,
           information: specification.information,
-          productId: productId,
+          productId: product.id,
           createdAt: specification.createdAt,
           updatedAt: specification.updatedAt,
         };
       }),
     };
-
-    function getValidatedNumericId(
-      id: number | undefined,
-      entity: string,
-    ): number {
-      if (id == undefined) {
-        throw new FormatationError({
-          message: `The id of ${entity} cannot be undefined in this case.`,
-        });
-      }
-      return id;
-    }
   }
 }

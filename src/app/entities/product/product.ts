@@ -20,7 +20,6 @@ interface ProductProps {
   specifications: ProductSpecification[];
   categories: ProductCategory[];
   reviews: ProductReview[];
-  mainImage: ProductImage;
   images: ProductImage[];
   createdAt: DateProp;
   updatedAt: DateProp;
@@ -30,7 +29,8 @@ export class Product {
   private props: ProductProps;
 
   private constructor(props: ProductProps) {
-    this.validateImages(props.mainImage, props.images);
+    this.validateSpecifications(props.specifications);
+    props.images = this.getValidatedImages(props.images);
     this.props = props;
   }
 
@@ -51,12 +51,45 @@ export class Product {
     return new Product(props);
   }
 
-  private validateImages(mainImage: ProductImage, images: ProductImage[]) {
-    if (images.includes(mainImage)) {
+  private getValidatedImages(images: ProductImage[]) {
+    if (images.length == 0) {
+      return images;
+    }
+
+    images.sort((a, b) => a.position - b.position);
+
+    if (images[0].position !== 1) {
       throw new ValidationError(
-        'Images property should not include the main product image',
+        'The first image position of the product images array must be 1',
       );
     }
+
+    if (images[0] && images[0].position)
+      for (let i = 0; i < images.length; i++) {
+        if (images[i + 1]) {
+          if (images[i + 1].position !== images[i].position + 1) {
+            throw new ValidationError("Product images positions aren't valid.");
+          }
+        }
+      }
+
+    return images;
+  }
+
+  private validateSpecifications(specifications: ProductSpecification[]) {
+    specifications.forEach((specification) => {
+      const duplicatedLabel = specifications.find(
+        (s) =>
+          s.label == specification.label &&
+          JSON.stringify(s) !== JSON.stringify(specification),
+      );
+
+      if (duplicatedLabel) {
+        throw new ValidationError(
+          'Product specifications label must be unique inside the product.',
+        );
+      }
+    });
   }
 
   public get id(): number | undefined {
@@ -93,10 +126,6 @@ export class Product {
 
   public get createdAt(): Date {
     return this.props.createdAt.value;
-  }
-
-  public get mainImage(): ProductImage {
-    return this.props.mainImage;
   }
 
   public get manufacturerId(): string {

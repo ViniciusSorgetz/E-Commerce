@@ -1,29 +1,31 @@
-import { Body, Controller, Post, UploadedFiles, UseInterceptors } from '@nestjs/common';
-import { RegisterProductUseCase } from 'src/app/use-cases/register-product.usecase';
+import { Body, Controller, Post } from '@nestjs/common';
 import { RegisterProductPresenter } from './register-product.presenter';
-import { RequestValidator } from 'src/infra/http/request.validator';
 import { registerProductBodySchema } from './register-product.dto';
-import {  FilesInterceptor } from '@nestjs/platform-express';
+import { RegisterProductUseCase } from '@src/app/use-cases/register-product/register-product.usecase';
+import { validateRequest } from '@src/shared/.';
 
 @Controller()
-export class ProductsController {
+export class RegisterProductController {
   constructor(private registerProductUseCase: RegisterProductUseCase) {}
 
   @Post('/products')
-  @UseInterceptors(FilesInterceptor('images'))
-  async registerProduct(@Body() body: registerProductBodySchema, @UploadedFiles() files: Files) {
-    const { name, price, tags, description, mainImageId, specifications } =
-      RequestValidator.validate(registerProductBodySchema, body);
+  async registerProduct(@Body() body: registerProductBodySchema) {
+    const {
+      name,
+      price,
+      categories,
+      description,
+      specifications,
+      manufacturerId,
+    } = validateRequest(registerProductBodySchema, body);
     const registeredProduct = await this.registerProductUseCase.execute({
       name,
       price,
-      tags,
+      categories,
       description,
-      mainImageId,
+      manufacturerId,
       specifications,
     });
-
-    files.
 
     return RegisterProductPresenter.present(registeredProduct);
   }

@@ -3,8 +3,10 @@ import { DateProp } from '../shared/date-prop';
 import { Email } from '../shared/email';
 import { Phone } from '../shared/phone';
 import { ManufacturerName } from './manufacturer-name';
+import { Uuid } from '../shared/uuid';
 
 interface ManufacturerProps {
+  id: Uuid;
   name: ManufacturerName;
   email: Email;
   phone: Phone;

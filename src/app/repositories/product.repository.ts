@@ -1,4 +1,4 @@
-import { productSpecificationsInput } from '@src/shared/types/product-specifications-input';
+import { productSpecificationsInput } from '@src/shared';
 import { Product } from '../entities/product/product';
 
 export interface CheckForEqualProps {
@@ -7,8 +7,8 @@ export interface CheckForEqualProps {
   specifications: productSpecificationsInput;
 }
 
-export interface ProductRepository {
+export abstract class ProductRepository {
   checkForEqual: (props: CheckForEqualProps) => Promise<boolean>;
   findOneById: (id: number) => Promise<Product>;
-  saveOne: (product: Product) => Promise<{ id: number }>;
+  saveOne: (product: Product) => Promise<Product>;
 }

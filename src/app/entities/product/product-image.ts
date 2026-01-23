@@ -4,8 +4,9 @@ import { NumericId } from '../shared/numeric-id';
 import { ProductImageUrl } from './product-image-url';
 
 interface ProductImageProps {
+  id?: NumericId;
   url: ProductImageUrl;
-  id: NumericId;
+  position: NumericId;
   createdAt: DateProp;
   updatedAt: DateProp;
 }
@@ -34,8 +35,12 @@ export class ProductImage {
     return new ProductImage(props);
   }
 
-  public get id(): number {
-    return this.props.id.value;
+  public get id(): number | undefined {
+    return this.props.id?.value;
+  }
+
+  public get position(): number {
+    return this.props.position.value;
   }
 
   public get url(): string {

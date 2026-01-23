@@ -1,5 +1,6 @@
+import { productCategoriesInput } from '@src/shared/types/product-inputs.type';
 import { ProductCategory } from '../entities/product/product-category';
 
-export interface ProductCategoryRepository {
-  findAllById(ids: { id: number }[]): Promise<(ProductCategory | null)[]>;
+export abstract class ProductCategoryRepository {
+  findAllById: (ids: productCategoriesInput) => Promise<ProductCategory[]>;
 }

@@ -4,18 +4,14 @@ export const registerProductBodySchema = z.object({
   name: z.string().min(3),
   price: z.number().positive(),
   description: z.string().min(3),
-  mainImageId: z.string().nonempty(),
   specifications: z.array(
     z.object({
       label: z.string().nonempty(),
       information: z.string().nonempty(),
     }),
   ),
-  tags: z.array(
-    z.object({
-      categoryId: z.number().positive(),
-    }),
-  ),
+  categories: z.array(z.number().positive()),
+  manufacturerId: z.uuidv4(),
 });
 
 export const registerProductPresenterSchema = z.object({
@@ -24,18 +20,19 @@ export const registerProductPresenterSchema = z.object({
     name: z.string().min(3),
     price: z.number().positive(),
     description: z.string().min(3),
-    mainImageId: z.string().nonempty(),
     specifications: z.array(
       z.object({
         label: z.string().nonempty(),
         information: z.string().nonempty(),
       }),
     ),
-    tags: z.array(
+    categories: z.array(
       z.object({
-        categoryId: z.number().positive(),
+        id: z.number().positive(),
+        category: z.string(),
       }),
     ),
+    manufacturer_id: z.uuidv4(),
   }),
 });
 

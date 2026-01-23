@@ -1,11 +1,11 @@
 import { DatabaseError } from '../errors/database.error';
 
-export function compareLength(
-  rawObjectLength: number,
-  savedObjectLength: number,
+export function compareLengthOnSave(
+  rawLength: number,
+  savedLength: number,
   objectName: string,
 ) {
-  if (rawObjectLength != savedObjectLength) {
+  if (rawLength != savedLength) {
     throw new DatabaseError({
       message: `Couldn't save ${objectName} into the database.`,
     });

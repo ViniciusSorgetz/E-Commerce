@@ -13,18 +13,17 @@ import {
 } from '@infra/database/drizzle/schemas';
 import { and, eq } from 'drizzle-orm';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
-import {
-  productSpecificationsInput,
-  NotFoundError,
-  DatabaseError,
-  compareLength,
-} from '@src/shared';
-import { DrizzleProductMapper } from './drizzle-product.mapper';
-import { Product } from '@src/app/entities';
+import { NotFoundError, DatabaseError, compareLengthOnSave } from '@src/shared';
+import { DrizzleProduct, DrizzleProductMapper } from './drizzle-product.mapper';
+import { NumericId, Product } from '@src/app/entities';
+import { ProvidersToken } from '@src/infra/http/providers/providers-token.enum';
+import { productSpecificationsInput } from '@src/shared/types/product-inputs.type';
 
 @Injectable()
 export class DrizzleProductRepository implements ProductRepository {
-  constructor(@Inject('DRIZZLE_DB') private drizzle: NodePgDatabase) {}
+  constructor(
+    @Inject(ProvidersToken.DrizzleDb) private drizzle: NodePgDatabase,
+  ) {}
 
   public async checkForEqual({
     name,
@@ -39,6 +38,8 @@ export class DrizzleProductRepository implements ProductRepository {
     if (!foundProduct) {
       return false;
     }
+
+    console.log(foundProduct);
 
     const foundSpecifications = await this.getSpecificationsByInputAndProductId(
       specifications,
@@ -66,19 +67,11 @@ export class DrizzleProductRepository implements ProductRepository {
     const foundSpecifications = await this.getSpecificationsByProductId(id);
     const foundReviews = await this.getReviewsByProductId(id);
     const foundImages = await this.getImagesByProductId(id);
-    const foundMainImage = await this.getMainImageById(
-      foundProduct.mainImageId,
-    );
-
-    if (!foundMainImage) {
-      throw new NotFoundError("Couldn't find product main image.");
-    }
 
     return DrizzleProductMapper.toEntity({
       product: foundProduct,
       categories: foundCategories,
       images: foundImages,
-      mainImage: foundMainImage,
       reviews: foundReviews,
       specifications: foundSpecifications,
     });
@@ -92,22 +85,29 @@ export class DrizzleProductRepository implements ProductRepository {
     }
   }
 
-  public async saveOne(product: Product): Promise<{ id: number }> {
-    const {
-      product: drizzleProduct,
-      categories,
-      images,
-      mainImage,
-      specifications,
-    } = DrizzleProductMapper.toDrizzle(product);
+  public async saveOne(product: Product): Promise<Product> {
+    const { product: drizzleProduct } = DrizzleProductMapper.toDrizzle(product);
 
-    const savedProduct = await this.saveProduct(drizzleProduct);
-    await this.saveCategories(categories);
-    await this.saveSpecifications(specifications);
-    await this.saveImages(images);
-    await this.saveMainImage(mainImage);
+    const savedProduct = await this.saveProduct(
+      drizzleProduct as typeof productsTable.$inferInsert,
+    );
 
-    return { id: savedProduct.id };
+    product.id = new NumericId(savedProduct.id);
+
+    const { images, categories, specifications } =
+      DrizzleProductMapper.toDrizzle(product) as DrizzleProduct;
+
+    await this.saveTags(savedProduct.id, categories);
+    const savedSpecifications = await this.saveSpecifications(specifications);
+    const savedImages = await this.saveImages(images);
+
+    return DrizzleProductMapper.toEntity({
+      product: savedProduct,
+      categories: categories,
+      images: savedImages,
+      reviews: [],
+      specifications: savedSpecifications,
+    });
   }
 
   private async getProductByNameAndDescription(
@@ -227,15 +227,25 @@ export class DrizzleProductRepository implements ProductRepository {
     return result[0];
   }
 
-  private async saveCategories(
-    categories: (typeof productCategoriesTable.$inferInsert)[],
+  private async saveTags(
+    productId: number,
+    categories: (typeof productCategoriesTable.$inferSelect)[],
   ) {
+    const tags = categories.map((category) => {
+      return {
+        productId: productId,
+        productCategoryId: category.id,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      };
+    });
+
     const result = await this.drizzle
-      .insert(productCategoriesTable)
-      .values(categories)
+      .insert(productTagsTable)
+      .values(tags)
       .returning();
 
-    compareLength(result.length, categories.length, 'product categories');
+    compareLengthOnSave(result.length, categories.length, 'product categories');
 
     return result;
   }
@@ -248,7 +258,7 @@ export class DrizzleProductRepository implements ProductRepository {
       .values(specifications)
       .returning();
 
-    compareLength(
+    compareLengthOnSave(
       result.length,
       specifications.length,
       'product specifications',
@@ -258,14 +268,16 @@ export class DrizzleProductRepository implements ProductRepository {
   }
 
   private async saveImages(images: (typeof productImagesTable.$inferInsert)[]) {
-    const result = await this.drizzle
-      .insert(productImagesTable)
-      .values(images)
-      .returning();
+    if (images.length > 0) {
+      const result = await this.drizzle
+        .insert(productImagesTable)
+        .values(images)
+        .returning();
 
-    compareLength(result.length, images.length, 'product images');
+      compareLengthOnSave(result.length, images.length, 'product images');
+    }
 
-    return result;
+    return [];
   }
 
   private async saveMainImage(
