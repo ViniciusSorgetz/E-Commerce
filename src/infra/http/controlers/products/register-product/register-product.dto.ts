@@ -1,3 +1,4 @@
+import { createZodDto } from 'nestjs-zod';
 import z from 'zod';
 
 export const registerProductBodySchema = z.object({
@@ -36,10 +37,10 @@ export const registerProductPresenterSchema = z.object({
   }),
 });
 
-export type registerProductPresenterSchema = z.infer<
-  typeof registerProductPresenterSchema
->;
+export class registerProductPresenterDto extends createZodDto(
+  registerProductPresenterSchema,
+) {}
 
-export type registerProductBodySchema = z.infer<
-  typeof registerProductBodySchema
->;
+export class registerProductBodyDto extends createZodDto(
+  registerProductBodySchema,
+) {}

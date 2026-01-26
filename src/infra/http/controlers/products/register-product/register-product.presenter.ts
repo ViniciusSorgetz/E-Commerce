@@ -1,13 +1,15 @@
 import { Product } from 'src/app/entities/product/product';
 import { FormatationError } from '@shared/.';
-import { Replace } from 'src/shared/utils/replace';
-import { registerProductPresenterSchema } from './register-product.dto';
+import {
+  registerProductPresenterDto,
+  registerProductPresenterSchema,
+} from './register-product.dto';
 
 export class RegisterProductPresenter {
-  static present(product: Product): registerProductPresenterSchema {
-    const formattedResponse = {
+  static present(product: Product): registerProductPresenterDto {
+    const formattedResponse: registerProductPresenterDto = {
       product: {
-        id: product.id,
+        id: product.id as number,
         name: product.name,
         price: product.price,
         description: product.description,
@@ -30,12 +32,7 @@ export class RegisterProductPresenter {
     return this.validate(formattedResponse);
   }
 
-  static validate(
-    formattedResponse: Replace<
-      registerProductPresenterSchema,
-      { product: { id?: number } }
-    >,
-  ) {
+  static validate(formattedResponse: registerProductPresenterDto) {
     try {
       return registerProductPresenterSchema.parse(formattedResponse);
     } catch (error) {
