@@ -21,4 +21,17 @@ export class DrizzleManufacturerMapper {
       createdAt: new DateProp(manufacturer.createdAt),
     });
   }
+
+  public static toDrizzle(
+    manufacturer: Manufacturer,
+  ): typeof manufacturersTable.$inferSelect {
+    return {
+      id: manufacturer.id,
+      name: manufacturer.name,
+      email: manufacturer.email,
+      phone: manufacturer.phone,
+      updatedAt: manufacturer.updatedAt,
+      createdAt: manufacturer.createdAt,
+    };
+  }
 }

@@ -18,6 +18,12 @@ export class DrizzleManufacturerRepository implements ManufacturerRepository {
     return result[0] ? DrizzleManufacturerMapper.toEntity(result[0]) : null;
   }
 
+  public async saveOne(manufacturer: Manufacturer): Promise<void> {
+    await this.drizzle
+      .insert(manufacturersTable)
+      .values(DrizzleManufacturerMapper.toDrizzle(manufacturer));
+  }
+
   private async getOneById(id: string) {
     return await this.drizzle
       .select()

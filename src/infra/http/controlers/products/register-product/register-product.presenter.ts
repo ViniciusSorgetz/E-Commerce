@@ -21,7 +21,7 @@ export class RegisterProductPresenter {
         }),
         categories: product.categories.map((category) => {
           return {
-            id: category.id,
+            id: category.id!,
             category: category.category,
           };
         }),

@@ -4,6 +4,7 @@ import { Email } from '../shared/email';
 import { Phone } from '../shared/phone';
 import { ManufacturerName } from './manufacturer-name';
 import { Uuid } from '../shared/uuid';
+import { randomUUID } from 'node:crypto';
 
 interface ManufacturerProps {
   id: Uuid;
@@ -22,11 +23,12 @@ export class Manufacturer {
   public static create(
     props: Replace<
       ManufacturerProps,
-      { createdAt?: undefined; updatedAt?: undefined }
+      { createdAt?: undefined; updatedAt?: undefined; id?: undefined }
     >,
   ) {
     return new Manufacturer({
       ...props,
+      id: new Uuid(randomUUID()),
       createdAt: new DateProp(),
       updatedAt: new DateProp(),
     });
@@ -34,5 +36,29 @@ export class Manufacturer {
 
   public static with(props: ManufacturerProps) {
     return new Manufacturer(props);
+  }
+
+  public get id(): string {
+    return this.props.id.value;
+  }
+
+  public get updatedAt(): Date {
+    return this.props.updatedAt.value;
+  }
+
+  public get createdAt(): Date {
+    return this.props.createdAt.value;
+  }
+
+  public get name(): string {
+    return this.props.name.value;
+  }
+
+  public get phone(): string {
+    return this.props.phone.value;
+  }
+
+  public get email(): string {
+    return this.props.email.value;
   }
 }

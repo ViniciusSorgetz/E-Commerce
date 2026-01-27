@@ -6,7 +6,7 @@ export const productSpecificatonsTable = pgTable('product_specifications', {
   label: varchar('label', { length: 255 }).notNull(),
   information: varchar('information', { length: 255 }).notNull(),
   productId: integer('product_id')
-    .references(() => productsTable.id)
+    .references(() => productsTable.id, { onDelete: 'cascade' })
     .notNull(),
   updatedAt: timestamp('updated_at').notNull(),
   createdAt: timestamp('created_at').notNull(),

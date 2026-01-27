@@ -3,4 +3,5 @@ import { ProductCategory } from '../entities/product/product-category';
 
 export abstract class ProductCategoryRepository {
   findAllById: (ids: productCategoriesInput) => Promise<ProductCategory[]>;
+  saveOne: (productCategory: ProductCategory) => Promise<{ id: number }>;
 }

@@ -30,24 +30,25 @@ export class DrizzleProductRepository implements ProductRepository {
     description,
     specifications,
   }: CheckForEqualProps): Promise<boolean> {
-    const foundProduct = await this.getProductByNameAndDescription(
+    const foundProducts = await this.getProductByNameAndDescription(
       name,
       description,
     );
 
-    if (!foundProduct) {
+    if (foundProducts.length == 0) {
       return false;
     }
 
-    console.log(foundProduct);
+    for (const foundProduct of foundProducts) {
+      const foundSpecifications =
+        await this.getSpecificationsByInputAndProductId(
+          specifications,
+          foundProduct.id,
+        );
 
-    const foundSpecifications = await this.getSpecificationsByInputAndProductId(
-      specifications,
-      foundProduct.id,
-    );
-
-    if (foundSpecifications.includes(undefined)) {
-      return false;
+      if (foundSpecifications.includes(undefined)) {
+        return false;
+      }
     }
 
     return true;
@@ -122,10 +123,9 @@ export class DrizzleProductRepository implements ProductRepository {
           eq(productsTable.name, name),
           eq(productsTable.description, description),
         ),
-      )
-      .limit(1);
+      );
 
-    return result[0] ?? null;
+    return result;
   }
 
   private async getSpecificationsByInputAndProductId(

@@ -12,7 +12,7 @@ export const productReviewsTable = pgTable('product_reviews', {
   rate: integer('rate').notNull(),
   description: text('description').notNull(),
   productId: integer('product_id')
-    .references(() => productsTable.id)
+    .references(() => productsTable.id, { onDelete: 'cascade' })
     .notNull(),
   userId: varchar('user_id', { length: 36 }).notNull(),
   updatedAt: timestamp('updated_at').notNull(),

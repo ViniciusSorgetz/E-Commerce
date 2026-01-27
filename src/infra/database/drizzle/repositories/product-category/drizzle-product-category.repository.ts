@@ -7,7 +7,7 @@ import { productCategoriesTable } from '../../schemas';
 import { inArray } from 'drizzle-orm';
 import { DrizzleProductCategoryMapper } from './drizzle-product-category.mapper';
 import { ProvidersToken } from '@src/infra/http/providers/providers-token.enum';
-import { ValidationError } from '@src/shared';
+import { DatabaseError, ValidationError } from '@src/shared';
 
 @Injectable()
 export class DrizzleProductCategoryRepository implements ProductCategoryRepository {
@@ -18,15 +18,20 @@ export class DrizzleProductCategoryRepository implements ProductCategoryReposito
   public async findAllById(
     ids: productCategoriesInput,
   ): Promise<ProductCategory[]> {
-    const result = await this.getCategoriesByIds(ids);
+    const foundCategories = await this.getCategoriesByIds(ids);
 
-    if (result.length != ids.length) {
+    if (foundCategories.length != ids.length) {
       throw new ValidationError(
         "Couldn't find all the given product gategory ids on the database.",
       );
     }
 
-    return result.map(DrizzleProductCategoryMapper.toEntity);
+    return foundCategories.map(DrizzleProductCategoryMapper.toEntity);
+  }
+
+  public async saveOne(category: ProductCategory) {
+    const savedCategory = await this.saveCategory(category);
+    return { id: savedCategory.id };
   }
 
   private async getCategoriesByIds(ids: productCategoriesInput) {
@@ -34,5 +39,20 @@ export class DrizzleProductCategoryRepository implements ProductCategoryReposito
       .select()
       .from(productCategoriesTable)
       .where(inArray(productCategoriesTable.id, ids));
+  }
+
+  private async saveCategory(category: ProductCategory) {
+    const result = await this.drizzle
+      .insert(productCategoriesTable)
+      .values(DrizzleProductCategoryMapper.toDrizzle(category))
+      .returning();
+
+    if (result.length == 0) {
+      throw new DatabaseError({
+        message: 'Error while saving product category.',
+      });
+    }
+
+    return result[0];
   }
 }
