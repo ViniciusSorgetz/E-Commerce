@@ -6,7 +6,7 @@ export const productTagsTable = pgTable('product_tags', {
   id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
   productId: integer('product_id')
     .notNull()
-    .references(() => productsTable.id),
+    .references(() => productsTable.id, { onDelete: 'cascade' }),
   productCategoryId: integer('product_category_id')
     .notNull()
     .references(() => productCategoriesTable.id),

@@ -1,4 +1,4 @@
-import { ValidationError } from 'src/shared/errors/validation.error';
+import { ValidationError } from '@shared/.';
 
 export class ManufacturerName {
   constructor(private name: string) {

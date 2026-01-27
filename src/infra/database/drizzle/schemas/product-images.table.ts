@@ -6,7 +6,7 @@ export const productImagesTable = pgTable('product_images', {
   position: integer('position').notNull(),
   url: varchar('url', { length: 255 }).notNull(),
   productId: integer('product_id')
-    .references(() => productsTable.id)
+    .references(() => productsTable.id, { onDelete: 'cascade' })
     .notNull(),
   updatedAt: timestamp('updated_at').notNull(),
   createdAt: timestamp('created_at').notNull(),

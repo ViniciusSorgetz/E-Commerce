@@ -40,6 +40,10 @@ export class ProductSpecification {
     return this.props.id?.value;
   }
 
+  public set id(id: NumericId) {
+    this.props.id = id;
+  }
+
   public get label(): string {
     return this.props.label.value;
   }

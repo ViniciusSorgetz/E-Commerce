@@ -11,7 +11,7 @@ export const registerProductBodySchema = z.object({
       information: z.string().nonempty(),
     }),
   ),
-  categories: z.array(z.number().positive()),
+  categories: z.array(z.number().min(1)),
   manufacturerId: z.uuidv4(),
 });
 
