@@ -14,7 +14,32 @@ export class DrizzleManufacturerRepository implements ManufacturerRepository {
   ) {}
 
   public async findOneById(id: string): Promise<Manufacturer | null> {
-    const result = await this.getOneById(id);
+    const result = await this.drizzle
+      .select()
+      .from(manufacturersTable)
+      .where(eq(manufacturersTable.id, id))
+      .limit(1);
+
+    return result[0] ? DrizzleManufacturerMapper.toEntity(result[0]) : null;
+  }
+
+  public async findOneByEmail(email: string) {
+    const result = await this.drizzle
+      .select()
+      .from(manufacturersTable)
+      .where(eq(manufacturersTable.email, email))
+      .limit(1);
+
+    return result[0] ? DrizzleManufacturerMapper.toEntity(result[0]) : null;
+  }
+
+  public async findOneByPhone(phone: string) {
+    const result = await this.drizzle
+      .select()
+      .from(manufacturersTable)
+      .where(eq(manufacturersTable.phone, phone))
+      .limit(1);
+
     return result[0] ? DrizzleManufacturerMapper.toEntity(result[0]) : null;
   }
 
@@ -22,13 +47,5 @@ export class DrizzleManufacturerRepository implements ManufacturerRepository {
     await this.drizzle
       .insert(manufacturersTable)
       .values(DrizzleManufacturerMapper.toDrizzle(manufacturer));
-  }
-
-  private async getOneById(id: string) {
-    return await this.drizzle
-      .select()
-      .from(manufacturersTable)
-      .where(eq(manufacturersTable.id, id))
-      .limit(1);
   }
 }
