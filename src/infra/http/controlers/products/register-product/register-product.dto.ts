@@ -37,10 +37,10 @@ export const registerProductPresenterSchema = z.object({
   }),
 });
 
-export class registerProductPresenterDto extends createZodDto(
+export class RegisterProductPresenterDto extends createZodDto(
   registerProductPresenterSchema,
 ) {}
 
-export class registerProductBodyDto extends createZodDto(
+export class RegisterProductBodyDto extends createZodDto(
   registerProductBodySchema,
 ) {}

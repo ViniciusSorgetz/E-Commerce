@@ -1,10 +1,10 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { ProductCategory } from '@src/app/entities';
+import { NumericId, ProductCategory } from '@src/app/entities';
 import { ProductCategoryRepository } from '@src/app/repositories/product-category.repository';
 import { productCategoriesInput } from '@src/shared/types/product-inputs.type';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import { productCategoriesTable } from '../../schemas';
-import { inArray } from 'drizzle-orm';
+import { eq, inArray } from 'drizzle-orm';
 import { DrizzleProductCategoryMapper } from './drizzle-product-category.mapper';
 import { ProvidersToken } from '@src/infra/http/providers/providers-token.enum';
 import { DatabaseError, ValidationError } from '@src/shared';
@@ -29,9 +29,20 @@ export class DrizzleProductCategoryRepository implements ProductCategoryReposito
     return foundCategories.map(DrizzleProductCategoryMapper.toEntity);
   }
 
-  public async saveOne(category: ProductCategory) {
-    const savedCategory = await this.saveCategory(category);
-    return { id: savedCategory.id };
+  public async saveOne(productCategory: ProductCategory) {
+    const savedProductCategory =
+      await this.saveProductCategory(productCategory);
+    productCategory.id = new NumericId(savedProductCategory.id);
+  }
+
+  public async findOneByCategory(category: string) {
+    const result = await this.drizzle
+      .select()
+      .from(productCategoriesTable)
+      .where(eq(productCategoriesTable.category, category))
+      .limit(1);
+
+    return result[0] ? DrizzleProductCategoryMapper.toEntity(result[0]) : null;
   }
 
   private async getCategoriesByIds(ids: productCategoriesInput) {
@@ -41,10 +52,10 @@ export class DrizzleProductCategoryRepository implements ProductCategoryReposito
       .where(inArray(productCategoriesTable.id, ids));
   }
 
-  private async saveCategory(category: ProductCategory) {
+  private async saveProductCategory(productCategory: ProductCategory) {
     const result = await this.drizzle
       .insert(productCategoriesTable)
-      .values(DrizzleProductCategoryMapper.toDrizzle(category))
+      .values(DrizzleProductCategoryMapper.toDrizzle(productCategory))
       .returning();
 
     if (result.length == 0) {

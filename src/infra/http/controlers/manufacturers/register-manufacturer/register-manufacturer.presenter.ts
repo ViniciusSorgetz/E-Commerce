@@ -1,6 +1,6 @@
 import { Manufacturer } from '@src/app/entities';
 import {
-  registerManufacturerPresenterDto,
+  RegisterManufacturerPresenterDto,
   registerManufacturerPresenterSchema,
 } from './register-manufacturer.dto';
 import { FormatationError } from '@src/shared';
@@ -8,7 +8,7 @@ import { FormatationError } from '@src/shared';
 export class RegisterManufacturerPresenter {
   public static present(
     manufacturer: Manufacturer,
-  ): registerManufacturerPresenterDto {
+  ): RegisterManufacturerPresenterDto {
     const formattedResponse = {
       manufacturer: {
         id: manufacturer.id,
@@ -21,7 +21,7 @@ export class RegisterManufacturerPresenter {
     return this.validate(formattedResponse);
   }
 
-  static validate(formattedResponse: registerManufacturerPresenterDto) {
+  static validate(formattedResponse: RegisterManufacturerPresenterDto) {
     try {
       return registerManufacturerPresenterSchema.parse(formattedResponse);
     } catch (error) {

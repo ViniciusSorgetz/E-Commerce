@@ -19,10 +19,10 @@ export const registerManufacturerPresenterSchema = z.object({
   }),
 });
 
-export class registerManufacturerBodyDto extends createZodDto(
+export class RegisterManufacturerBodyDto extends createZodDto(
   registerManufacturerBodySchema,
 ) {}
 
-export class registerManufacturerPresenterDto extends createZodDto(
+export class RegisterManufacturerPresenterDto extends createZodDto(
   registerManufacturerPresenterSchema,
 ) {}
