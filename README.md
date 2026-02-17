@@ -1,12 +1,12 @@
 # E-Commerce
 
-## Projeto pessoal feito para aprimorar meus conhecimentos na prática
+## Personal project made for improving my knowledge with practice 
 
 <br> 
 
-- Notion com anotações complementares: https://www.notion.so/E-commerce-1eedd40bd7ac80188928c8c3dbba3a88
+- Notion with complementary notes: https://www.notion.so/E-commerce-1eedd40bd7ac80188928c8c3dbba3a88
 
-## 🚀 Competências
+## 🚀 Tecnologies
 
 - TypeScript
 - Nest
@@ -16,9 +16,9 @@
 - Postgres
 - Drizzle ORM
 
-## 📌 Trabalhando atualmente
+## 📌 Working currently
 
-- Criação de testes automatizados
-- Integração com Github Actions
-- Sistema de Login com Auth.js
-- CRUDs das principais entidades
+- Creation of automated tests
+- Integration with Github Actions
+- Login system with Auth.js
+- CRUDs of the main entities
