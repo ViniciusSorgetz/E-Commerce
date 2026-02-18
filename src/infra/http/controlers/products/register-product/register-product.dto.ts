@@ -12,7 +12,11 @@ export const registerProductBodySchema = z.object({
     }),
   ),
   categories: z.array(z.number().min(1)),
+<<<<<<< HEAD
   merchantId: z.uuidv4(),
+=======
+  manufacturerId: z.uuidv4(),
+>>>>>>> 77bf72363abcc203067f22b23eae83cfaf98e544
 });
 
 export const registerProductPresenterSchema = z.object({

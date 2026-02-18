@@ -4,8 +4,13 @@
   "version": "7",
   "dialect": "postgresql",
   "tables": {
+<<<<<<< HEAD
     "public.merchants": {
       "name": "merchants",
+=======
+    "public.manufacturers": {
+      "name": "manufacturers",
+>>>>>>> 77bf72363abcc203067f22b23eae83cfaf98e544
       "schema": "",
       "columns": {
         "id": {
@@ -45,34 +50,58 @@
           "notNull": true
         }
       },
+<<<<<<< HEAD
       "indexes": { },
       "foreignKeys": { },
       "compositePrimaryKeys": { },
       "uniqueConstraints": {
         "merchants_name_unique": {
           "name": "merchants_name_unique",
+=======
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "manufacturers_name_unique": {
+          "name": "manufacturers_name_unique",
+>>>>>>> 77bf72363abcc203067f22b23eae83cfaf98e544
           "nullsNotDistinct": false,
           "columns": [
             "name"
           ]
         },
+<<<<<<< HEAD
         "merchants_email_unique": {
           "name": "merchants_email_unique",
+=======
+        "manufacturers_email_unique": {
+          "name": "manufacturers_email_unique",
+>>>>>>> 77bf72363abcc203067f22b23eae83cfaf98e544
           "nullsNotDistinct": false,
           "columns": [
             "email"
           ]
         },
+<<<<<<< HEAD
         "merchants_phone_unique": {
           "name": "merchants_phone_unique",
+=======
+        "manufacturers_phone_unique": {
+          "name": "manufacturers_phone_unique",
+>>>>>>> 77bf72363abcc203067f22b23eae83cfaf98e544
           "nullsNotDistinct": false,
           "columns": [
             "phone"
           ]
         }
       },
+<<<<<<< HEAD
       "policies": { },
       "checkConstraints": { },
+=======
+      "policies": {},
+      "checkConstraints": {},
+>>>>>>> 77bf72363abcc203067f22b23eae83cfaf98e544
       "isRLSEnabled": false
     },
     "public.product_categories": {
@@ -115,9 +144,15 @@
           "notNull": true
         }
       },
+<<<<<<< HEAD
       "indexes": { },
       "foreignKeys": { },
       "compositePrimaryKeys": { },
+=======
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+>>>>>>> 77bf72363abcc203067f22b23eae83cfaf98e544
       "uniqueConstraints": {
         "product_categories_category_unique": {
           "name": "product_categories_category_unique",
@@ -127,8 +162,13 @@
           ]
         }
       },
+<<<<<<< HEAD
       "policies": { },
       "checkConstraints": { },
+=======
+      "policies": {},
+      "checkConstraints": {},
+>>>>>>> 77bf72363abcc203067f22b23eae83cfaf98e544
       "isRLSEnabled": false
     },
     "public.product_images": {
@@ -183,7 +223,11 @@
           "notNull": true
         }
       },
+<<<<<<< HEAD
       "indexes": { },
+=======
+      "indexes": {},
+>>>>>>> 77bf72363abcc203067f22b23eae83cfaf98e544
       "foreignKeys": {
         "product_images_product_id_products_id_fk": {
           "name": "product_images_product_id_products_id_fk",
@@ -199,10 +243,17 @@
           "onUpdate": "no action"
         }
       },
+<<<<<<< HEAD
       "compositePrimaryKeys": { },
       "uniqueConstraints": { },
       "policies": { },
       "checkConstraints": { },
+=======
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+>>>>>>> 77bf72363abcc203067f22b23eae83cfaf98e544
       "isRLSEnabled": false
     },
     "public.product_reviews": {
@@ -263,7 +314,11 @@
           "notNull": true
         }
       },
+<<<<<<< HEAD
       "indexes": { },
+=======
+      "indexes": {},
+>>>>>>> 77bf72363abcc203067f22b23eae83cfaf98e544
       "foreignKeys": {
         "product_reviews_product_id_products_id_fk": {
           "name": "product_reviews_product_id_products_id_fk",
@@ -279,10 +334,17 @@
           "onUpdate": "no action"
         }
       },
+<<<<<<< HEAD
       "compositePrimaryKeys": { },
       "uniqueConstraints": { },
       "policies": { },
       "checkConstraints": { },
+=======
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+>>>>>>> 77bf72363abcc203067f22b23eae83cfaf98e544
       "isRLSEnabled": false
     },
     "public.product_specifications": {
@@ -337,7 +399,11 @@
           "notNull": true
         }
       },
+<<<<<<< HEAD
       "indexes": { },
+=======
+      "indexes": {},
+>>>>>>> 77bf72363abcc203067f22b23eae83cfaf98e544
       "foreignKeys": {
         "product_specifications_product_id_products_id_fk": {
           "name": "product_specifications_product_id_products_id_fk",
@@ -353,10 +419,17 @@
           "onUpdate": "no action"
         }
       },
+<<<<<<< HEAD
       "compositePrimaryKeys": { },
       "uniqueConstraints": { },
       "policies": { },
       "checkConstraints": { },
+=======
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+>>>>>>> 77bf72363abcc203067f22b23eae83cfaf98e544
       "isRLSEnabled": false
     },
     "public.product_tags": {
@@ -405,7 +478,11 @@
           "notNull": true
         }
       },
+<<<<<<< HEAD
       "indexes": { },
+=======
+      "indexes": {},
+>>>>>>> 77bf72363abcc203067f22b23eae83cfaf98e544
       "foreignKeys": {
         "product_tags_product_id_products_id_fk": {
           "name": "product_tags_product_id_products_id_fk",
@@ -434,10 +511,17 @@
           "onUpdate": "no action"
         }
       },
+<<<<<<< HEAD
       "compositePrimaryKeys": { },
       "uniqueConstraints": { },
       "policies": { },
       "checkConstraints": { },
+=======
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+>>>>>>> 77bf72363abcc203067f22b23eae83cfaf98e544
       "isRLSEnabled": false
     },
     "public.products": {
@@ -479,8 +563,13 @@
           "primaryKey": false,
           "notNull": true
         },
+<<<<<<< HEAD
         "merchant_id": {
           "name": "merchant_id",
+=======
+        "manufacturer_id": {
+          "name": "manufacturer_id",
+>>>>>>> 77bf72363abcc203067f22b23eae83cfaf98e544
           "type": "varchar(36)",
           "primaryKey": false,
           "notNull": true
@@ -498,6 +587,7 @@
           "notNull": true
         }
       },
+<<<<<<< HEAD
       "indexes": { },
       "foreignKeys": {
         "products_merchant_id_merchants_id_fk": {
@@ -506,6 +596,16 @@
           "tableTo": "merchants",
           "columnsFrom": [
             "merchant_id"
+=======
+      "indexes": {},
+      "foreignKeys": {
+        "products_manufacturer_id_manufacturers_id_fk": {
+          "name": "products_manufacturer_id_manufacturers_id_fk",
+          "tableFrom": "products",
+          "tableTo": "manufacturers",
+          "columnsFrom": [
+            "manufacturer_id"
+>>>>>>> 77bf72363abcc203067f22b23eae83cfaf98e544
           ],
           "columnsTo": [
             "id"
@@ -514,6 +614,7 @@
           "onUpdate": "no action"
         }
       },
+<<<<<<< HEAD
       "compositePrimaryKeys": { },
       "uniqueConstraints": { },
       "policies": { },
@@ -531,5 +632,24 @@
     "columns": { },
     "schemas": { },
     "tables": { }
+=======
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    }
+  },
+  "enums": {},
+  "schemas": {},
+  "sequences": {},
+  "roles": {},
+  "policies": {},
+  "views": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+>>>>>>> 77bf72363abcc203067f22b23eae83cfaf98e544
   }
 }
