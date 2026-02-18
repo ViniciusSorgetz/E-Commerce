@@ -2,13 +2,13 @@ import { RegisterProductController } from '@src/infra/http/controlers/products/r
 import { expect, it, beforeAll, describe } from 'vitest';
 import { Orchestrator } from '@test/orchestrator';
 import { ValidationError } from '@src/shared';
-import { ManufacturerFactory } from '../../factories/manufacturer.factory';
+import { MerchantFactory } from '../../factories/merchant.factory';
 import { ProductCategoryFactory } from '../../factories/product-category.factory';
-import { ManufacturerRepository } from '@app/repositories/manufacturer.repository';
+import { MerchantRepository } from '@app/repositories/merchant.repository';
 import { ProductCategoryRepository } from '@app/repositories/product-category.repository';
 
 let registerProductController: RegisterProductController;
-let manufacturerFactory: ManufacturerFactory;
+let merchantFactory: MerchantFactory;
 let prouctCategoryFactory: ProductCategoryFactory;
 
 beforeAll(async () => {
@@ -16,9 +16,7 @@ beforeAll(async () => {
   const testModule = await Orchestrator.getTestModule();
   registerProductController = testModule.get(RegisterProductController);
 
-  manufacturerFactory = new ManufacturerFactory(
-    testModule.get(ManufacturerRepository),
-  );
+  merchantFactory = new MerchantFactory(testModule.get(MerchantRepository));
 
   prouctCategoryFactory = new ProductCategoryFactory(
     testModule.get(ProductCategoryRepository),
@@ -27,7 +25,7 @@ beforeAll(async () => {
 
 describe('Register product', () => {
   it('should be able to register a valid product.', async () => {
-    const manufacturer = await manufacturerFactory.make();
+    const merchant = await merchantFactory.make();
     const category1 = await prouctCategoryFactory.make();
     const category2 = await prouctCategoryFactory.make();
 
@@ -35,7 +33,7 @@ describe('Register product', () => {
       name: 'My Valid Product',
       description:
         'My Valid Product Description. My Valid Product Description.My Valid Product Description. My Valid Product Description.',
-      manufacturerId: manufacturer.id,
+      merchantId: merchant.id,
       categories: [category1.id!, category2.id!],
       specifications: [
         {
@@ -53,13 +51,13 @@ describe('Register product', () => {
     expect(response).toBeTruthy();
   });
 
-  it('should not be able to register a product without an exisisting manufacturer.', async () => {
+  it('should not be able to register a product without an exisisting merchant.', async () => {
     await expect(async () => {
       return await registerProductController.registerProduct({
         name: 'My Valid Product',
         description:
           'My Valid Product Description. My Valid Product Description.My Valid Product Description. My Valid Product Description.',
-        manufacturerId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+        merchantId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
         categories: [1, 2],
         specifications: [
           {

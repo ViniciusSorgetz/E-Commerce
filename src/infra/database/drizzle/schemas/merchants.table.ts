@@ -1,6 +1,6 @@
 import { pgTable, timestamp, varchar } from 'drizzle-orm/pg-core';
 
-export const manufacturersTable = pgTable('manufacturers', {
+export const merchantsTable = pgTable('merchants', {
   id: varchar('id', { length: 36 }).primaryKey(),
   name: varchar('name', { length: 255 }).unique().notNull(),
   email: varchar('email', { length: 255 }).unique().notNull(),

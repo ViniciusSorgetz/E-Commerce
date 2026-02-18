@@ -2,8 +2,8 @@ import { Module } from '@nestjs/common';
 import { RegisterProductController } from './controlers/products/register-product/register-product.controller';
 import { DrizzleModule } from '../database/drizzle/drizzle.module';
 import { RegisterProductUseCase } from '@src/app/use-cases/register-product/register-product.usecase';
-import { RegisterManufacturerController } from './controlers/manufacturers/register-manufacturer/register-manufacturer.controller';
-import { RegisterManufacturerUseCase } from '@src/app/use-cases/register-manufacturer/register-manufacturer.usecase';
+import { RegisterMerchantController } from './controlers/merchants/register-merchant/register-merchant.controller';
+import { RegisterMerchantUseCase } from '@src/app/use-cases/register-merchant/register-merchant.usecase';
 import { RegisterProductCategoryController } from './controlers/product-categories/register-product-category/register-product-category.controller';
 import { RegisterProductCategoryUseCase } from '@src/app/use-cases/register-product-category/register-product-category.usecase';
 
@@ -11,12 +11,12 @@ import { RegisterProductCategoryUseCase } from '@src/app/use-cases/register-prod
   imports: [DrizzleModule.config()],
   controllers: [
     RegisterProductController,
-    RegisterManufacturerController,
+    RegisterMerchantController,
     RegisterProductCategoryController,
   ],
   providers: [
     RegisterProductUseCase,
-    RegisterManufacturerUseCase,
+    RegisterMerchantUseCase,
     RegisterProductCategoryUseCase,
   ],
 })

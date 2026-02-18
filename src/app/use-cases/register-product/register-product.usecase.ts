@@ -12,7 +12,7 @@ import {
   Uuid,
 } from '@src/app/entities';
 import { ProductCategoryRepository } from '@src/app/repositories/product-category.repository';
-import { ManufacturerRepository } from '@src/app/repositories/manufacturer.repository';
+import { MerchantRepository } from '@src/app/repositories/merchant.repository';
 import {
   productCategoriesInput,
   productSpecificationsInput,
@@ -24,7 +24,7 @@ interface RegisterProductBody {
   description: string;
   specifications: productSpecificationsInput;
   categories: productCategoriesInput;
-  manufacturerId: string;
+  merchantId: string;
 }
 
 type RegisterProductResponse = Promise<Product>;
@@ -36,23 +36,17 @@ export class RegisterProductUseCase {
   constructor(
     private readonly productRepository: ProductRepository,
     private readonly productCategoryRepository: ProductCategoryRepository,
-    private readonly manufacturerRepository: ManufacturerRepository,
+    private readonly merchantRepository: MerchantRepository,
   ) {
     this.registerProductValidator = new RegisterProductValidator(
       this.productRepository,
-      this.manufacturerRepository,
+      this.merchantRepository,
     );
   }
 
   public async execute(body: RegisterProductBody): RegisterProductResponse {
-    const {
-      name,
-      description,
-      price,
-      categories,
-      specifications,
-      manufacturerId,
-    } = body;
+    const { name, description, price, categories, specifications, merchantId } =
+      body;
 
     // validations
     await this.registerProductValidator.checkDuplicatedProduct({
@@ -60,7 +54,7 @@ export class RegisterProductUseCase {
       description,
       specifications,
     });
-    await this.registerProductValidator.checkManufacturer(manufacturerId);
+    await this.registerProductValidator.checkMerchant(merchantId);
     const foundCategories =
       await this.productCategoryRepository.findAllById(categories);
 
@@ -78,7 +72,7 @@ export class RegisterProductUseCase {
           label: new ProductSpecificationLabel(specification.label),
         });
       }),
-      manufacturerId: new Uuid(manufacturerId),
+      merchantId: new Uuid(merchantId),
       images: [],
       reviews: [],
     });

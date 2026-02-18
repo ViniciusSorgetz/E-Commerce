@@ -25,7 +25,7 @@ export class RegisterProductPresenter {
             category: category.category,
           };
         }),
-        manufacturer_id: product.manufacturerId,
+        merchant_id: product.merchantId,
       },
     };
 

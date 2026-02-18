@@ -1,6 +1,6 @@
 import { ValidationError } from '@shared/.';
 
-export class ManufacturerName {
+export class MerchantName {
   constructor(private name: string) {
     this.validate(name);
     this.name = name;
@@ -9,7 +9,7 @@ export class ManufacturerName {
   private validate(name: string) {
     if (name.length < 3) {
       throw new ValidationError(
-        'ManufacturerName must be at least 3 characters long.',
+        'MerchantName must be at least 3 characters long.',
       );
     }
   }

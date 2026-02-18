@@ -4,8 +4,8 @@
   "version": "7",
   "dialect": "postgresql",
   "tables": {
-    "public.manufacturers": {
-      "name": "manufacturers",
+    "public.merchants": {
+      "name": "merchants",
       "schema": "",
       "columns": {
         "id": {
@@ -45,34 +45,34 @@
           "notNull": true
         }
       },
-      "indexes": {},
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
+      "indexes": { },
+      "foreignKeys": { },
+      "compositePrimaryKeys": { },
       "uniqueConstraints": {
-        "manufacturers_name_unique": {
-          "name": "manufacturers_name_unique",
+        "merchants_name_unique": {
+          "name": "merchants_name_unique",
           "nullsNotDistinct": false,
           "columns": [
             "name"
           ]
         },
-        "manufacturers_email_unique": {
-          "name": "manufacturers_email_unique",
+        "merchants_email_unique": {
+          "name": "merchants_email_unique",
           "nullsNotDistinct": false,
           "columns": [
             "email"
           ]
         },
-        "manufacturers_phone_unique": {
-          "name": "manufacturers_phone_unique",
+        "merchants_phone_unique": {
+          "name": "merchants_phone_unique",
           "nullsNotDistinct": false,
           "columns": [
             "phone"
           ]
         }
       },
-      "policies": {},
-      "checkConstraints": {},
+      "policies": { },
+      "checkConstraints": { },
       "isRLSEnabled": false
     },
     "public.product_categories": {
@@ -115,9 +115,9 @@
           "notNull": true
         }
       },
-      "indexes": {},
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
+      "indexes": { },
+      "foreignKeys": { },
+      "compositePrimaryKeys": { },
       "uniqueConstraints": {
         "product_categories_category_unique": {
           "name": "product_categories_category_unique",
@@ -127,8 +127,8 @@
           ]
         }
       },
-      "policies": {},
-      "checkConstraints": {},
+      "policies": { },
+      "checkConstraints": { },
       "isRLSEnabled": false
     },
     "public.product_images": {
@@ -177,7 +177,7 @@
           "notNull": true
         }
       },
-      "indexes": {},
+      "indexes": { },
       "foreignKeys": {
         "product_images_product_id_products_id_fk": {
           "name": "product_images_product_id_products_id_fk",
@@ -193,10 +193,10 @@
           "onUpdate": "no action"
         }
       },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
+      "compositePrimaryKeys": { },
+      "uniqueConstraints": { },
+      "policies": { },
+      "checkConstraints": { },
       "isRLSEnabled": false
     },
     "public.product_reviews": {
@@ -257,7 +257,7 @@
           "notNull": true
         }
       },
-      "indexes": {},
+      "indexes": { },
       "foreignKeys": {
         "product_reviews_product_id_products_id_fk": {
           "name": "product_reviews_product_id_products_id_fk",
@@ -273,10 +273,10 @@
           "onUpdate": "no action"
         }
       },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
+      "compositePrimaryKeys": { },
+      "uniqueConstraints": { },
+      "policies": { },
+      "checkConstraints": { },
       "isRLSEnabled": false
     },
     "public.product_specifications": {
@@ -331,7 +331,7 @@
           "notNull": true
         }
       },
-      "indexes": {},
+      "indexes": { },
       "foreignKeys": {
         "product_specifications_product_id_products_id_fk": {
           "name": "product_specifications_product_id_products_id_fk",
@@ -347,10 +347,10 @@
           "onUpdate": "no action"
         }
       },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
+      "compositePrimaryKeys": { },
+      "uniqueConstraints": { },
+      "policies": { },
+      "checkConstraints": { },
       "isRLSEnabled": false
     },
     "public.product_tags": {
@@ -399,7 +399,7 @@
           "notNull": true
         }
       },
-      "indexes": {},
+      "indexes": { },
       "foreignKeys": {
         "product_tags_product_id_products_id_fk": {
           "name": "product_tags_product_id_products_id_fk",
@@ -428,10 +428,10 @@
           "onUpdate": "no action"
         }
       },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
+      "compositePrimaryKeys": { },
+      "uniqueConstraints": { },
+      "policies": { },
+      "checkConstraints": { },
       "isRLSEnabled": false
     },
     "public.products": {
@@ -473,8 +473,8 @@
           "primaryKey": false,
           "notNull": true
         },
-        "manufacturer_id": {
-          "name": "manufacturer_id",
+        "merchant_id": {
+          "name": "merchant_id",
           "type": "varchar(36)",
           "primaryKey": false,
           "notNull": true
@@ -498,14 +498,14 @@
           "notNull": true
         }
       },
-      "indexes": {},
+      "indexes": { },
       "foreignKeys": {
-        "products_manufacturer_id_manufacturers_id_fk": {
-          "name": "products_manufacturer_id_manufacturers_id_fk",
+        "products_merchant_id_merchants_id_fk": {
+          "name": "products_merchant_id_merchants_id_fk",
           "tableFrom": "products",
-          "tableTo": "manufacturers",
+          "tableTo": "merchants",
           "columnsFrom": [
-            "manufacturer_id"
+            "merchant_id"
           ],
           "columnsTo": [
             "id"
@@ -514,22 +514,22 @@
           "onUpdate": "no action"
         }
       },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
+      "compositePrimaryKeys": { },
+      "uniqueConstraints": { },
+      "policies": { },
+      "checkConstraints": { },
       "isRLSEnabled": false
     }
   },
-  "enums": {},
-  "schemas": {},
-  "sequences": {},
-  "roles": {},
-  "policies": {},
-  "views": {},
+  "enums": { },
+  "schemas": { },
+  "sequences": { },
+  "roles": { },
+  "policies": { },
+  "views": { },
   "_meta": {
-    "columns": {},
-    "schemas": {},
-    "tables": {}
+    "columns": { },
+    "schemas": { },
+    "tables": { }
   }
 }

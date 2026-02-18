@@ -2,31 +2,31 @@ import { Replace } from '@src/shared/utils/replace';
 import { DateProp } from '../shared/date-prop';
 import { Email } from '../shared/email';
 import { Phone } from '../shared/phone';
-import { ManufacturerName } from './manufacturer-name';
+import { MerchantName } from './merchant-name';
 import { Uuid } from '../shared/uuid';
 import { randomUUID } from 'node:crypto';
 
-interface ManufacturerProps {
+interface MerchantProps {
   id: Uuid;
-  name: ManufacturerName;
+  name: MerchantName;
   email: Email;
   phone: Phone;
   updatedAt: DateProp;
   createdAt: DateProp;
 }
 
-export class Manufacturer {
-  private constructor(private props: ManufacturerProps) {
+export class Merchant {
+  private constructor(private props: MerchantProps) {
     this.props = props;
   }
 
   public static create(
     props: Replace<
-      ManufacturerProps,
+      MerchantProps,
       { createdAt?: undefined; updatedAt?: undefined; id?: undefined }
     >,
   ) {
-    return new Manufacturer({
+    return new Merchant({
       ...props,
       id: new Uuid(randomUUID()),
       createdAt: new DateProp(),
@@ -34,8 +34,8 @@ export class Manufacturer {
     });
   }
 
-  public static with(props: ManufacturerProps) {
-    return new Manufacturer(props);
+  public static with(props: MerchantProps) {
+    return new Merchant(props);
   }
 
   public get id(): string {

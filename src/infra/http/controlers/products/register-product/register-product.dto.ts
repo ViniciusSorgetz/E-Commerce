@@ -12,7 +12,7 @@ export const registerProductBodySchema = z.object({
     }),
   ),
   categories: z.array(z.number().min(1)),
-  manufacturerId: z.uuidv4(),
+  merchantId: z.uuidv4(),
 });
 
 export const registerProductPresenterSchema = z.object({
@@ -33,7 +33,7 @@ export const registerProductPresenterSchema = z.object({
         category: z.string(),
       }),
     ),
-    manufacturer_id: z.uuidv4(),
+    merchant_id: z.uuidv4(),
   }),
 });
 
