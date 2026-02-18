@@ -1,4 +1,4 @@
-export * from "./manufacturers.table";
+export * from "./merchants.table";
 export * from "./product-categories.table";
 export * from "./product-images.table";
 export * from "./product-review.table";

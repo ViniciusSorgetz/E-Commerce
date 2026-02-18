@@ -4,8 +4,8 @@ import { DrizzleProductRepository } from './repositories/product/drizzle-product
 import { DrizzleConnection } from './drizzle.connection';
 import { ProductCategoryRepository } from '@src/app/repositories/product-category.repository';
 import { DrizzleProductCategoryRepository } from './repositories/product-category/drizzle-product-category.repository';
-import { DrizzleManufacturerRepository } from './repositories/manufacturer/drizzle-manufacturer.repository';
-import { ManufacturerRepository } from '@src/app/repositories/manufacturer.repository';
+import { DrizzleMerchantRepository } from './repositories/merchant/drizzle-merchant.repository';
+import { MerchantRepository } from '@src/app/repositories/merchant.repository';
 import { ProvidersToken } from '@src/infra/http/providers/providers-token.enum';
 
 @Module({})
@@ -29,14 +29,14 @@ export class DrizzleModule {
           useClass: DrizzleProductCategoryRepository,
         },
         {
-          provide: ManufacturerRepository,
-          useClass: DrizzleManufacturerRepository,
+          provide: MerchantRepository,
+          useClass: DrizzleMerchantRepository,
         },
       ],
       exports: [
         ProductRepository,
         ProductCategoryRepository,
-        ManufacturerRepository,
+        MerchantRepository,
       ],
     };
   }

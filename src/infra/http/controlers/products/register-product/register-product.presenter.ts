@@ -1,13 +1,13 @@
 import { Product } from 'src/app/entities/product/product';
 import { FormatationError } from '@shared/.';
 import {
-  registerProductPresenterDto,
+  RegisterProductPresenterDto,
   registerProductPresenterSchema,
 } from './register-product.dto';
 
 export class RegisterProductPresenter {
-  static present(product: Product): registerProductPresenterDto {
-    const formattedResponse: registerProductPresenterDto = {
+  static present(product: Product): RegisterProductPresenterDto {
+    const formattedResponse: RegisterProductPresenterDto = {
       product: {
         id: product.id as number,
         name: product.name,
@@ -21,18 +21,18 @@ export class RegisterProductPresenter {
         }),
         categories: product.categories.map((category) => {
           return {
-            id: category.id,
+            id: category.id!,
             category: category.category,
           };
         }),
-        manufacturer_id: product.manufacturerId,
+        merchant_id: product.merchantId,
       },
     };
 
     return this.validate(formattedResponse);
   }
 
-  static validate(formattedResponse: registerProductPresenterDto) {
+  static validate(formattedResponse: RegisterProductPresenterDto) {
     try {
       return registerProductPresenterSchema.parse(formattedResponse);
     } catch (error) {

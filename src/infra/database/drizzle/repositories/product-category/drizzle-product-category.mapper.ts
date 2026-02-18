@@ -17,4 +17,13 @@ export class DrizzleProductCategoryMapper {
       createdAt: new DateProp(category.createdAt),
     });
   }
+
+  public static toDrizzle(category: ProductCategory) {
+    return {
+      id: category.id,
+      category: category.category,
+      updatedAt: category.updatedAt,
+      createdAt: category.createdAt,
+    };
+  }
 }

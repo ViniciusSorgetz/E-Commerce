@@ -3,4 +3,6 @@ import { ProductCategory } from '../entities/product/product-category';
 
 export abstract class ProductCategoryRepository {
   findAllById: (ids: productCategoriesInput) => Promise<ProductCategory[]>;
+  findOneByCategory: (category: string) => Promise<ProductCategory | null>;
+  saveOne: (productCategory: ProductCategory) => Promise<void>;
 }

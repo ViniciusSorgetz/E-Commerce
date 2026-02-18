@@ -4,7 +4,7 @@ import { NumericId } from '../shared/numeric-id';
 import { ProductCategoryCategory } from './product-category-category';
 
 interface ProductCategoryProps {
-  id: NumericId;
+  id?: NumericId;
   category: ProductCategoryCategory;
   createdAt: DateProp;
   updatedAt: DateProp;
@@ -34,8 +34,12 @@ export class ProductCategory {
     return new ProductCategory(props);
   }
 
-  public get id(): number {
-    return this.props.id.value;
+  public get id(): number | undefined {
+    return this.props.id?.value;
+  }
+
+  public set id(id: NumericId) {
+    this.props.id = id;
   }
 
   public get category(): string {

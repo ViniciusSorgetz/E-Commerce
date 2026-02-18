@@ -40,21 +40,14 @@ export class DrizzleProductMapper {
     specifications,
     reviews,
   }: DrizzleProduct): Product {
-    const {
-      id,
-      name,
-      description,
-      manufacturerId,
-      price,
-      createdAt,
-      updatedAt,
-    } = product;
+    const { id, name, description, merchantId, price, createdAt, updatedAt } =
+      product;
 
     return Product.with({
       id: new NumericId(id),
       name: new ProductName(name),
       description: new ProductDescription(description),
-      manufacturerId: new Uuid(manufacturerId),
+      merchantId: new Uuid(merchantId),
       price: new ProductPrice(price),
       createdAt: new DateProp(createdAt),
       updatedAt: new DateProp(updatedAt),
@@ -107,7 +100,7 @@ export class DrizzleProductMapper {
         name: product.name,
         description: product.description,
         price: product.price,
-        manufacturerId: product.manufacturerId,
+        merchantId: product.merchantId,
         updatedAt: product.updatedAt,
         createdAt: product.createdAt,
       },

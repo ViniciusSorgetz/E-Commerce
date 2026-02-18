@@ -6,7 +6,7 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
-    "target": "ES2023",
+    "target": "es2023",
     "sourceMap": true,
     "outDir": "./dist",
     "baseUrl": "./",
@@ -22,8 +22,10 @@
       "@src/*": ["./src/*"],
       "@app/*": ["./src/app/*"],
       "@infra/*": ["./src/infra/*"],
+      "@test/*": ["./test/*"],
       "@shared/*": ["./src/shared/*"],
       "@entities/*": ["./src/app/entities/*"]
-    }
+    },
+    "types": ["vitest/globals"]
   }
 }

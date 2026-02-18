@@ -16,7 +16,7 @@ interface ProductProps {
   name: ProductName;
   price: ProductPrice;
   description: ProductDescription;
-  manufacturerId: Uuid;
+  merchantId: Uuid;
   specifications: ProductSpecification[];
   categories: ProductCategory[];
   reviews: ProductReview[];
@@ -128,8 +128,8 @@ export class Product {
     return this.props.createdAt.value;
   }
 
-  public get manufacturerId(): string {
-    return this.props.manufacturerId.value;
+  public get merchantId(): string {
+    return this.props.merchantId.value;
   }
 
   public get images(): ProductImage[] {

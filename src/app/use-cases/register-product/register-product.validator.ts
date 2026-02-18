@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { ManufacturerRepository } from '@src/app/repositories/manufacturer.repository';
+import { MerchantRepository } from '@src/app/repositories/merchant.repository';
 import { ProductRepository } from '@src/app/repositories/product.repository';
 import { ValidationError } from '@src/shared/errors/validation.error';
 import { productSpecificationsInput } from '@src/shared/types/product-inputs.type';
@@ -8,7 +8,7 @@ import { productSpecificationsInput } from '@src/shared/types/product-inputs.typ
 export class RegisterProductValidator {
   constructor(
     private readonly productRepository: ProductRepository,
-    private readonly manufacturerRepository: ManufacturerRepository,
+    private readonly merchantRepository: MerchantRepository,
   ) {}
 
   public async checkDuplicatedProduct({
@@ -31,12 +31,11 @@ export class RegisterProductValidator {
     }
   }
 
-  public async checkManufacturer(manufacturerId: string) {
-    const foundManufacturer =
-      await this.manufacturerRepository.findOneById(manufacturerId);
+  public async checkMerchant(merchantId: string) {
+    const foundMerchant = await this.merchantRepository.findOneById(merchantId);
 
-    if (!foundManufacturer) {
-      throw new ValidationError("Product manufacturer doesn't exist.");
+    if (!foundMerchant) {
+      throw new ValidationError("Product merchant doesn't exist.");
     }
   }
 }
